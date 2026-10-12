@@ -1,0 +1,31 @@
+# datasets
+dataset/
+dataset2/
+dataset3/
+VOC2007/
+images/
+label_check_results/
+VOC2007/JPEGImages/
+tools/
+utils/aws/
+venv/
+
+# weights
+weights/
+*.pt
+*.pth
+
+# outputs
+runs/
+output/
+wandb/
+
+# cache
+__pycache__/
+*.pyc
+*.log
+
+# large results
+*.png
+*.svg
+

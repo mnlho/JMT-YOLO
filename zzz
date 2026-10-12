@@ -1,0 +1,122 @@
+python -m torch.distributed.launch --nproc_per_node 1 \
+/home/yu/zjh/Code/20240421/SSDA-YOLO-master/ssda_yolov5_train.py \
+  --weights /home/yu/zjh/Code/20240421/SSDA-YOLO-master/weights/yolov5l.pt \
+  --data /home/yu/zjh/Code/20240421/SSDA-YOLO-master/data/yamls_sda/cityscapes_csfoggy_VOC.yaml \
+  --name cityscapes_ssda_960_yolov5l \
+  --img 960 --device 0 --batch-size 6 --epochs 200 \
+  --lambda_weight 0.005 --consistency_loss --alpha_weight 2.0
+
+VOC
+python /home/yu/zjh/SSDA-YOLO-copy/ssda_yolov5_test.py \
+    --data /home/yu/zjh/SSDA-YOLO-copy/data/yamls_sda/pascalvoc0712_clipart1k_VOC.yaml \
+    --weights runs/train/voc2clipart_ssda_960_yolov5l/weights/best_student.pt \
+    --name 1 \
+    --img 960 --batch-size 4 --device 0
+
+CITYSCAPES
+python /home/yu/zjh/SSDA-YOLO-copy/ssda_yolov5_test.py \
+    --data /home/yu/zjh/SSDA-YOLO-copy/data/yamls_sda/cityscapes_csfoggy_VOC.yaml \
+    --weights runs/train/DAAT_ASA_1_22_conf_filter_min/weights/best_student.pt \
+    --name 1 \
+    --img 960 --batch-size 4 --device 0
+
+KITTI
+python /home/yu/zjh/SSDA-YOLO-copy/ssda_yolov5_test.py \
+    --data /home/yu/zjh/SSDA-YOLO-copy/data/yamls_sda/KITTI_CityScapes_VOC.yaml \
+    --weights runs/train/fanxiu4_1_18_K2C_SAM3_carefun_nolabels/weights/best_student.pt \
+    --name test \
+    --img 960 --batch-size 4 --device 0
+
+
+  #加入mic进行训练的指令
+python -m torch.distributed.launch --nproc_per_node 1 \
+/home/yu/zjh/SSDA-YOLO-copy/ssda_yolov5_train.py \
+  --weights /home/yu/zjh/SSDA-YOLO-copy/weights/yolov5l.pt \
+  --data /home/yu/zjh/SSDA-YOLO-copy/data/yamls_sda/cityscapes_csfoggy_VOC.yaml \
+  --name 11_14_cityscapes_segmic \
+  --img 960 --device 0 --batch-size 6 --epochs 200 \
+  --lambda_weight 0.005 --consistency_loss --alpha_weight 2.0
+
+ #调整遮掩率ratio
+python -m torch.distributed.launch --nproc_per_node 1 \
+/home/yu/zjh/SSDA-YOLO-copy/ssda_yolov5_train.py \
+  --weights /home/yu/zjh/SSDA-YOLO-copy/weights/yolov5l.pt \
+  --data /home/yu/zjh/SSDA-YOLO-copy/data/yamls_sda/cityscapes_csfoggy_VOC.yaml \
+  --name PL_12_29_test \
+  --img 960 --device 0 --batch-size 2 --epochs 200 \
+  --lambda_weight 0.005 --consistency_loss --alpha_weight 2.0
+
+  #增加分割头的指令
+  python -m torch.distributed.launch --nproc_per_node 1 /home/yu/zjh/SSDA-YOLO-copy/ssda_yolov5_train.py \
+  --weights /home/yu/zjh/SSDA-YOLO-copy/weights/yolov5s.pt \
+  --data /home/yu/zjh/SSDA-YOLO-copy/data/yamls_sda/cityscapes_csfoggy_VOC.yaml \
+  --name 4_11_ratio_0\
+  --img 960 --device 0 --batch-size 2 --epochs 50 \
+  --lambda_weight 0.005 --consistency_loss --alpha_weight 2.0
+
+
+
+  #训练KITTI和cityscapes数据集
+  python -m torch.distributed.launch --nproc_per_node 1 /home/yu/zjh/SSDA-YOLO-copy/ssda_yolov5_train.py \
+  --weights /home/yu/zjh/SSDA-YOLO-copy/weights/yolov5l.pt \
+  --data /home/yu/zjh/SSDA-YOLO-copy/data/yamls_sda/KITTI_CityScapes_VOC.yaml \
+  --name fanxiu4_1_18_K2C_SAM3_carefun_nolabels \
+  --img 960 --device 0 --batch-size 2 --epochs 20 \
+  --lambda_weight 0.005 --consistency_loss --alpha_weight 2.0
+
+  #voc-clipart
+    python -m torch.distributed.launch --nproc_per_node 1 /home/yu/zjh/SSDA-YOLO-copy/ssda_yolov5_train.py \
+  --weights /home/yu/zjh/SSDA-YOLO-copy/weights/yolov5l.pt \
+  --data /home/yu/zjh/SSDA-YOLO-copy/data/yamls_sda/pascalvoc0712_clipart1k_VOC.yaml \
+  --name new_9-24_V2C \
+  --img 960 --device 0 --batch-size 2 --epochs 200 \
+  --lambda_weight 0.005 --consistency_loss --alpha_weight 2.0
+
+python /home/yu/zjh/SSDA-YOLO-copy/ssda_yolov5_test.py \
+    --data /home/yu/zjh/Code/yolov5/yolov5-master/images\
+    --weights /home/yu/zjh/SSDA-YOLO-copy/runs/train/A_3_11_V2C/weights/best_student.pt
+
+
+    python /home/yu/zjh/SSDA-YOLO-copy/utils/aws/yolov5/detect.py \
+    --source /home/yu/zjh/K2C_test/640 \
+    --weights /home/yu/zjh/Code/yolov5/yolov5-master/runs/train/exp/weights/best.pt \
+    --img 960 \
+    --name K2C_source_only
+
+#索引值加1
+python /home/yu/zjh/SSDA-YOLO-copy/utils/handle/adjust_index-1.py \
+--input_dir /home/yu/zjh/SSDA-YOLO-copy/dataset2/clipart2voc-20240626T111805Z-001/clipart2voc/yolov5_format/labels/val \
+--output_dir /home/yu/zjh/SSDA-YOLO-copy/dataset2/clipart2voc-20240626T111805Z-001/clipart2voc/yolov5_format/labels/vals \
+--no_backup
+
+
+
+ #第二个点-ASA训练指令
+python -m torch.distributed.launch --nproc_per_node 1 \
+/home/yu/zjh/SSDA-YOLO-copy/ssda_yolov5_train_ASA.py \
+  --weights /home/yu/zjh/SSDA-YOLO-copy/weights/yolov5l.pt \
+  --data /home/yu/zjh/SSDA-YOLO-copy/data/yamls_sda/cityscapes_csfoggy_VOC.yaml \
+  --name ASA_12_23 \
+  --img 960 --device 0 --batch-size 2 --epochs 200 \
+  --lambda_weight 0.005 --consistency_loss --alpha_weight 2.0
+
+# DAAT + ASA 训练
+# 1月26日晚上19点55开始跑的
+python -m torch.distributed.launch --nproc_per_node 1 \
+/home/yu/zjh/SSDA-YOLO-copy/ssda_yolov5_train_ASA.py \
+  --weights /home/yu/zjh/SSDA-YOLO-copy/weights/yolov5l.pt \
+  --data /home/yu/zjh/SSDA-YOLO-copy/data/yamls_sda/cityscapes_csfoggy_VOC.yaml \
+  --name DAAT_ASA_1_24_only_DAAT \
+  --img 960 --device 0 --batch-size 2 --epochs 200 \
+  --lambda_weight 0.005 --consistency_loss --alpha_weight 2.0 \
+  --use_daat --daat_ema_momentum 0.99 --daat_lower_bound 0.25 --daat_upper_bound 0.9 --use_asa
+
+
+# 训练后生成可视化
+python -c "from utils.training_logger import create_visualizations; create_visualizations('runs/train/exp/training_stats.json')"
+
+# 修改loss函数plot的代码
+python -c "from utils.plots import plot_results; plot_results(save_dir='runs/train/3_9_K2C_train3')"
+
+# OOM
+export PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:128
