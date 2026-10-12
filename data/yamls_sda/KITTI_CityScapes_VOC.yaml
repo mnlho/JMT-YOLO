@@ -1,0 +1,40 @@
+
+# Train/val/test sets as 1) dir: path/to/imgs, 2) file: path/to/imgs.txt, or 3) list: [path/to/imgs1, path/to/imgs2, ..]
+path: /home/yu/zjh/SSDA-YOLO-copy/dataset3
+
+# real train and val images (relative to 'path') of CityScapes, including 2975+500=3475 images
+train_source_real:
+  - yolo_kitti_format_2/images/train
+# fake train and val images (relative to 'path') of CityScapes, with target-like images from CityScapesFoggy
+train_source_fake:
+  - yolo_K2C_format_2/images/train
+
+# real train images (relative to 'path') of CityScapesFoggy, including 2975 images, label not used
+train_target_real:
+  - yolov5_city_format_2/images/train
+
+# fake train images (relative to 'path') of CityScapesFoggy, with source-like images from CityScapes, label not used
+train_target_fake:
+  - yolo_C2K_format_2/images/train
+
+
+# real val images (relative to 'path') of CityScapesFoggy, including 500 images, never appear when training
+test_target_real:
+  - yolov5_city_format_2/images/val
+
+#第三次反修：修改分割数据集路径-全量标签-直接使用sam分割，不用yolo标签，主要修改了train_source_seg_real和train_source_seg_fake的路径
+#第四次反修：加上noisy，主要修改了train_source_seg_real和train_source_seg_fake的路径
+train_source_seg_real:
+  - /home/yu/zjh/SSDA-YOLO-copy/dataset3/fanxiu2_seg_labels/new_seg_kitti/images/train
+train_source_seg_fake:
+  - /home/yu/zjh/SSDA-YOLO-copy/dataset3/fanxiu2_seg_labels/new_seg_K2C/images/train
+train_target_seg_real:
+  - /home/yu/zjh/SSDA-YOLO-copy/dataset3/seg_city_2/images/train
+train_target_seg_fake:
+  - /home/yu/zjh/SSDA-YOLO-copy/dataset3/seg_C2K_2/images/train
+
+# Classes
+nc: 2  # number of classes
+n_segcls: 2 # 分割类别数
+names: ['background', 'car']  # class names
+

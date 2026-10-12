@@ -1,0 +1,37 @@
+
+# Train/val/test sets as 1) dir: path/to/imgs, 2) file: path/to/imgs.txt, or 3) list: [path/to/imgs1, path/to/imgs2, ..]
+path: /home/yu/zjh/SSDA-YOLO-copy/dataset
+
+# real train and val images (relative to 'path') of CityScapes, including 2975+500=3475 images
+train_source_real:
+  - leftImg8bit_trainvaltest/yolov5_format/images/train
+# fake train and val images (relative to 'path') of CityScapes, with target-like images from CityScapesFoggy
+train_source_fake:
+  - CityScapes2CityScapesFoggy/yolov5_format_csf/images/train
+
+# real train images (relative to 'path') of CityScapesFoggy, including 2975 images, label not used
+train_target_real:
+  - leftImg8bit_trainval_foggyDBF/yolov5_format/images/train
+
+# fake train images (relative to 'path') of CityScapesFoggy, with source-like images from CityScapes, label not used
+train_target_fake:
+  - CityScapesFoggy2CityScapes/yolov5_format_cs/images/train
+
+
+# real val images (relative to 'path') of CityScapesFoggy, including 500 images, never appear when training
+test_target_real:
+  - leftImg8bit_trainval_foggyDBF/yolov5_format/images/val
+
+train_source_seg_real:
+  - /home/yu/zjh/SSDA-YOLO-copy/dataset/leftImg8bit_trainvaltest/segData/images/train
+train_source_seg_fake:
+  - /home/yu/zjh/SSDA-YOLO-copy/dataset/CityScapes2CityScapesFoggy/segData_csf/images/train
+train_target_seg_real:
+  - /home/yu/zjh/SSDA-YOLO-copy/dataset/leftImg8bit_trainval_foggyDBF/segData/images/train
+train_target_seg_fake:
+  - /home/yu/zjh/SSDA-YOLO-copy/dataset/CityScapesFoggy2CityScapes/segData_cs/images/train
+
+# Classes
+nc: 8  # number of classes
+n_segcls: 9 # 分割类别数
+names: [ 'bus', 'bicycle', 'car', 'motorcycle', 'person', 'rider', 'train', 'truck' ]  # class names

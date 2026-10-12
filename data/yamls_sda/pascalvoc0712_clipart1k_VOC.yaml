@@ -1,0 +1,46 @@
+# PASCAL VOC dataset http://host.robots.ox.ac.uk/pascal/VOC/
+# Train command: python train.py --data VOC.yaml
+# Default dataset location is next to YOLOv5:
+#   /parent
+#     /datasets/VOC
+#     /yolov5
+
+
+# Train/val/test sets as 1) dir: path/to/imgs, 2) file: path/to/imgs.txt, or 3) list: [path/to/imgs1, path/to/imgs2, ..]
+path: /home/yu/zjh/SSDA-YOLO-copy/dataset2
+# real train and val images (relative to 'path') of pascalvoc0712, including 5011(2501+2510)+11540(5717+5823)=16551 images
+train_source_real: 
+  - VOCtrainval_06-Nov-2007/VOCdevkit/VOC2007/yolov5_format/images/train
+  - VOCtrainval_11-May-2012/VOCtrainval_11-May-2012/VOCdevkit/VOC2012/yolov5_format/images/train
+# fake train and val images (relative to 'path') of pascalvoc0712, with target-like images using cycleGAN
+train_source_fake:
+  - voc2clipart/yolov5_format/images/train
+# real train images (relative to 'path') of clipart1k, including 500 images
+train_target_real: 
+  - clipart/yolov5_format/images/train
+# fake train images (relative to 'path') of clipart1k, with source-like images using cycleGAN
+train_target_fake: 
+  - clipart2voc-20240626T111805Z-001/clipart2voc/yolov5_format/images/train
+
+# real val images (relative to 'path') of clipart1k, including 500 images, never appear when training 
+test_target_real: 
+  - clipart/yolov5_format/images/val
+
+
+train_source_seg_real:
+  - /home/yu/zjh/SSDA-YOLO-copy/dataset2/VOCtrainval_06-Nov-2007/VOCdevkit/VOC2007/seg_data/images/train
+  - /home/yu/zjh/SSDA-YOLO-copy/dataset2/VOCtrainval_11-May-2012/VOCtrainval_11-May-2012/VOCdevkit/VOC2012/seg_data/images/train
+train_source_seg_fake:
+  - /home/yu/zjh/SSDA-YOLO-copy/dataset2/voc2clipart/seg_data/images/train
+train_target_seg_real:
+  - /home/yu/zjh/SSDA-YOLO-copy/dataset2/clipart/seg_data/images/train
+train_target_seg_fake:
+  - /home/yu/zjh/SSDA-YOLO-copy/dataset2/clipart2voc-20240626T111805Z-001/clipart2voc/seg_data/images/train
+
+# Classes
+nc: 21  # number of classes
+n_segcls: 21
+names: [ 'background', 'aeroplane', 'bicycle', 'bird', 'boat', 'bottle', 'bus', 'car', 'cat', 'chair', 'cow', 'diningtable', 'dog',
+         'horse', 'motorbike', 'person', 'pottedplant', 'sheep', 'sofa', 'train', 'tvmonitor' ]  # class names
+
+
