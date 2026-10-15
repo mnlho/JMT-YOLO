@@ -3,15 +3,15 @@ SPL
 
 #SPL
 
-This repository contains teacher-student domain adaptation object detection code based on YOLO, as well as the DAAT adaptive pseudo-label threshold of SPL and the DPLA dynamic pseudo-label assignment module.
+   This repository contains teacher-student domain adaptation object detection code based on YOLO, as well as the DAAT adaptive pseudo-label threshold of SPL and the DPLA dynamic pseudo-label assignment module.
 
 <img width="990" height="557" alt="屏幕截图 2026-10-15 113652" src="https://github.com/user-attachments/assets/d8a30505-1edb-4dde-bab5-860316eb098d" />
 
-The following commands are executed in the root directory of the repository. The example uses Cityscapes → Foggy Cityscapes (`c2f`); the dataset, style-converted images, and pre-trained weights need to be prepared by yourself.
+   The following commands are executed in the root directory of the repository. The example uses Cityscapes → Foggy Cityscapes (`c2f`); the dataset, style-converted images, and pre-trained weights need to be prepared by yourself.
 
 1. Environment Installation
 
-Actual experimental environment: Ubuntu, NVIDIA RTX 3090, Python 3.8, PyTorch 2.4. The CUDA version needs to match the installed PyTorch and graphics card driver.
+   Actual experimental environment: Ubuntu, NVIDIA RTX 3090, Python 3.8, PyTorch 2.4. The CUDA version needs to match the installed PyTorch and graphics card driver.
 
 ```bash
 conda create -n jmt_yolo python=3.8 -y
@@ -32,14 +32,14 @@ python -m pip freeze > environment_pip.txt
 
 2. Data and weight preparation
    
-Place the pre-trained weights of YOLOv5-L into `weights/yolov5l.pt`. The path below is just an example and can be replaced with the actual location:
+   Place the pre-trained weights of YOLOv5-L into `weights/yolov5l.pt`. The path below is just an example and can be replaced with the actual location:
 
 ```bash
 export DATA_ROOT=/path/to/dataset
 export WEIGHTS=/path/to/yolov5l.pt
 ```
 
-The `c2f` data configuration includes the following content:
+   The `c2f` data configuration includes the following content:
 
 |    Configuration Key    | Content                                                     
 | ----------------------- | -------------------------------------------------------- 
@@ -50,7 +50,7 @@ The `c2f` data configuration includes the following content:
 | `train_source_seg_real` | Segmentation image tree corresponding to the source domain image
 | `test_target_real`      | Validation images in the target domain
       
-The detection images, detection annotations, and segmentation masks are organized in parallel directories, for example:
+   The detection images, detection annotations, and segmentation masks are organized in parallel directories, for example:
 
 ```text
 dataset/
@@ -65,11 +65,11 @@ dataset/
 ├── leftImg8bit_trainval_foggyDBF/...
 └── CityScapesFoggy2CityScapes/...
 ```
-The detection annotations are in YOLO format: each line consists of `class_id x_center y_center width height`, with coordinates normalized to `[0, 1]`. The part of the image filename without the extension serves as the pairing ID; IDs within the same set must be unique, and paired images and source domain masks must correspond. The `images` directory needs to be retained in the path, and the program finds annotations by replacing it with `labels`.
+   The detection annotations are in YOLO format: each line consists of `class_id x_center y_center width height`, with coordinates normalized to `[0, 1]`. The part of the image filename without the extension serves as the pairing ID; IDs within the same set must be unique, and paired images and source domain masks must correspond. The `images` directory needs to be retained in the path, and the program finds annotations by replacing it with `labels`.
 
-The detection category order for `c2f` is: `bus, bicycle, car, motorcycle, person, rider, train, truck`. The number of segmentation categories is 9; category codes that conform to the configuration are required.
+   The detection category order for `c2f` is: `bus, bicycle, car, motorcycle, person, rider, train, truck`. The number of segmentation categories is 9; category codes that conform to the configuration are required.
 
-Generate configuration and check data:
+   Generate configuration and check data:
 
 ```bash
 python revision_run.py prepare --task c2f --data-root "$DATA_ROOT"
@@ -82,5 +82,5 @@ python revision_run.py check --data revision_configs/c2f.yaml --weights "$WEIGHT
 
 
 3. Acknowledgements
-4. 
-This project is based on YOLO and related components retained from the repository. The author information and license notices for each component are subject to the corresponding source files and upstream projects.
+
+   This project is based on YOLO and related components retained from the repository. The author information and license notices for each component are subject to the corresponding source files and upstream projects.
