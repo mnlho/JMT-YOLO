@@ -1,7 +1,7 @@
-# JMT-YOLO
-JMT-YOLO
+# SPL
+SPL
 
-# JMT-YOLO / SPL
+#SPL
 
 本仓库包含基于YOLO的教师–学生域适应目标检测代码，以及SPL的DAAT自适应伪标签阈值、DPLA 动态伪标签分配模块。
 <img width="990" height="557" alt="屏幕截图 2026-10-15 113652" src="https://github.com/user-attachments/assets/d8a30505-1edb-4dde-bab5-860316eb098d" />
