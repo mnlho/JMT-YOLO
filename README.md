@@ -4,9 +4,9 @@ JMT-YOLO
 # JMT-YOLO / SPL
 
 本仓库包含基于YOLO的教师–学生域适应目标检测代码，以及SPL的DAAT自适应伪标签阈值、DPLA 动态伪标签分配模块。仓库同时提供统一设置下的训练、伪标签质量分析、效率测量、多随机种子统计和模块消融工具。
+<img width="990" height="557" alt="屏幕截图 2026-10-15 113652" src="https://github.com/user-attachments/assets/d8a30505-1edb-4dde-bab5-860316eb098d" />
 
 以下命令在仓库根目录执行。示例使用 Cityscapes → Foggy Cityscapes（`c2f`）；数据集、风格转换图像和预训练权重需自行准备。
-<img width="990" height="557" alt="屏幕截图 2026-10-15 113652" src="https://github.com/user-attachments/assets/d8a30505-1edb-4dde-bab5-860316eb098d" />
 
 1. 环境安装
 
@@ -76,6 +76,8 @@ python revision_run.py prepare --task c2f --data-root "$DATA_ROOT"
 # 检查并按实际数据位置修改 revision_configs/c2f.yaml 中的全部路径
 python revision_run.py check --data revision_configs/c2f.yaml --weights "$WEIGHTS"
 ```
+<img width="1477" height="823" alt="image" src="https://github.com/user-attachments/assets/3a79231f-fe2c-4747-8f6c-b6a68fd5d3cc" />
+
 
 3. 致谢
 
