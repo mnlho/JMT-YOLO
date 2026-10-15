@@ -6,6 +6,7 @@ JMT-YOLO
 本仓库包含基于YOLO的教师–学生域适应目标检测代码，以及SPL的DAAT自适应伪标签阈值、DPLA 动态伪标签分配模块。仓库同时提供统一设置下的训练、伪标签质量分析、效率测量、多随机种子统计和模块消融工具。
 
 以下命令在仓库根目录执行。示例使用 Cityscapes → Foggy Cityscapes（`c2f`）；数据集、风格转换图像和预训练权重需自行准备。
+<img width="990" height="557" alt="屏幕截图 2026-10-15 113652" src="https://github.com/user-attachments/assets/d8a30505-1edb-4dde-bab5-860316eb098d" />
 
 1. 环境安装
 
