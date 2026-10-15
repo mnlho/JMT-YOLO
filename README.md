@@ -3,53 +3,54 @@ SPL
 
 #SPL
 
-本仓库包含基于YOLO的教师–学生域适应目标检测代码，以及SPL的DAAT自适应伪标签阈值、DPLA 动态伪标签分配模块。
+This repository contains teacher-student domain adaptation object detection code based on YOLO, as well as the DAAT adaptive pseudo-label threshold of SPL and the DPLA dynamic pseudo-label assignment module.
+
 <img width="990" height="557" alt="屏幕截图 2026-10-15 113652" src="https://github.com/user-attachments/assets/d8a30505-1edb-4dde-bab5-860316eb098d" />
 
-以下命令在仓库根目录执行。示例使用 Cityscapes → Foggy Cityscapes（`c2f`）；数据集、风格转换图像和预训练权重需自行准备。
+The following commands are executed in the root directory of the repository. The example uses Cityscapes → Foggy Cityscapes (`c2f`); the dataset, style-converted images, and pre-trained weights need to be prepared by yourself.
 
-1. 环境安装
+1. Environment Installation
 
-实际实验环境：Ubuntu、NVIDIA RTX 3090、Python 3.8、PyTorch 2.4。CUDA 版本需与安装的 PyTorch 及显卡驱动匹配。
+Actual experimental environment: Ubuntu, NVIDIA RTX 3090, Python 3.8, PyTorch 2.4. The CUDA version needs to match the installed PyTorch and graphics card driver.
 
 ```bash
 conda create -n jmt_yolo python=3.8 -y
 conda activate jmt_yolo
 
-# 先安装与本机 CUDA 环境匹配的 PyTorch / torchvision，再安装其余依赖
+# First, install PyTorch / torchvision that matches the CUDA environment on this machine, and then install the remaining dependencies
 python -m pip install -r requirements.txt
 python -m pip install kornia==0.6.12
 
 python -c "import torch, kornia; print('torch:', torch.__version__); print('CUDA:', torch.cuda.is_available())"
 ```
 
-`requirements.txt` 为原项目依赖列表，并未锁定所有包的版本。复现实验时请额外保存环境：
+`requirements.txt` is the dependency list of the original project, and it does not lock the versions of all packages. Please save the environment separately when reproducing the experiment:
 
 ```bash
 python -m pip freeze > environment_pip.txt
 ```
 
-2. 数据与权重准备
-
-将 YOLOv5-L 预训练权重放到 `weights/yolov5l.pt`。下面的路径仅为示例，可替换为实际位置：
+2. Data and weight preparation
+   
+Place the pre-trained weights of YOLOv5-L into `weights/yolov5l.pt`. The path below is just an example and can be replaced with the actual location:
 
 ```bash
 export DATA_ROOT=/path/to/dataset
 export WEIGHTS=/path/to/yolov5l.pt
 ```
 
-`c2f` 数据配置包含以下内容：
+The `c2f` data configuration includes the following content:
 
-|          配置键         | 内容                                                     
+|    Configuration Key    | Content                                                     
 | ----------------------- | -------------------------------------------------------- 
-| `train_source_real`     | 源域原始训练图像                                         
-| `train_source_fake`     | 源域转换为目标域风格的训练图像                           
-| `train_target_real`     | 目标域原始训练图像                                       
-| `train_target_fake`     | 目标域转换为源域风格的训练图像                           
-| `train_source_seg_real` | 与源域图像对应的分割图像树
-| `test_target_real`      | 目标域验证图像                                           
-
-检测图像、检测标注及分割掩码采用平行目录，例如：
+| `train_source_real`     | Original training images in the source domain                                         
+| `train_source_fake`     | Training images converted from the source domain to the target domain style                           
+| `train_target_real`     | Original training images in the target domain                                       
+| `train_target_fake`     | Training images converted from the target domain to the source domain style                           
+| `train_source_seg_real` | Segmentation image tree corresponding to the source domain image
+| `test_target_real`      | Validation images in the target domain
+      
+The detection images, detection annotations, and segmentation masks are organized in parallel directories, for example:
 
 ```text
 dataset/
@@ -64,21 +65,22 @@ dataset/
 ├── leftImg8bit_trainval_foggyDBF/...
 └── CityScapesFoggy2CityScapes/...
 ```
-检测标注为 YOLO 格式：每行 `class_id x_center y_center width height`，坐标归一化到 `[0, 1]`。图像文件名不含扩展名的部分作为配对 ID；同一集合内 ID 必须唯一，成对图像及源域掩码必须对应。路径中需保留 `images` 目录，程序通过替换为 `labels` 查找标注。
+The detection annotations are in YOLO format: each line consists of `class_id x_center y_center width height`, with coordinates normalized to `[0, 1]`. The part of the image filename without the extension serves as the pairing ID; IDs within the same set must be unique, and paired images and source domain masks must correspond. The `images` directory needs to be retained in the path, and the program finds annotations by replacing it with `labels`.
 
-`c2f` 检测类别顺序为：`bus, bicycle, car, motorcycle, person, rider, train, truck`。分割类别数为 9；需使用符合配置的类别编码。
+The detection category order for `c2f` is: `bus, bicycle, car, motorcycle, person, rider, train, truck`. The number of segmentation categories is 9; category codes that conform to the configuration are required.
 
-生成配置并检查数据：
+Generate configuration and check data:
 
 ```bash
 python revision_run.py prepare --task c2f --data-root "$DATA_ROOT"
 
-# 检查并按实际数据位置修改 revision_configs/c2f.yaml 中的全部路径
+# Check and modify all paths in revision_configs/c2f.yaml according to the actual data location
+
 python revision_run.py check --data revision_configs/c2f.yaml --weights "$WEIGHTS"
 ```
 <img width="1477" height="823" alt="image" src="https://github.com/user-attachments/assets/3a79231f-fe2c-4747-8f6c-b6a68fd5d3cc" />
 
 
-3. 致谢
-
-本项目基于YOLO及仓库保留的相关组件。各组件的作者信息和许可声明以对应源文件及上游项目为准。
+3. Acknowledgements
+4. 
+This project is based on YOLO and related components retained from the repository. The author information and license notices for each component are subject to the corresponding source files and upstream projects.
